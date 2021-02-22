@@ -12,8 +12,9 @@ namespace Cookit.WebApp.Models
         public string Title { get; set; }
         public string Description { get; set; }
         [DisplayName("Ingredients")]
-        public ICollection<IngredientAmount> IngredientAmounts { get; set; }
-        public ICollection<Instruction> Instructions { get; set; }
-        public ICollection<RecipeEquipment> RecipeEquipment { get; set; }
+        public List<IngredientAmount> IngredientAmounts { get; set; }
+        public List<Instruction> Instructions { get; set; }
+        [DisplayName("Equipment")]
+        public List<RecipeEquipment> RecipeEquipment { get; set; }
     }
 }

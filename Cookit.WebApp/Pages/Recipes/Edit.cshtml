@@ -9,32 +9,148 @@
 
 <h4>Recipe</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Recipe.RecipeID" />
-            <div class="form-group">
-                <label asp-for="Recipe.Title" class="control-label"></label>
-                <input asp-for="Recipe.Title" class="form-control" />
-                <span asp-validation-for="Recipe.Title" class="text-danger"></span>
+<form method="post">
+    <div class="form-group">
+        <div class="form-row mb-2">
+            <div class="col-8 offset-2">
+                <input asp-for="Recipe.Title" class="form-control" placeholder="Your Recipe Title" required />
             </div>
-            <div class="form-group">
-                <label asp-for="Recipe.Description" class="control-label"></label>
-                <input asp-for="Recipe.Description" class="form-control" />
-                <span asp-validation-for="Recipe.Description" class="text-danger"></span>
+
+        </div>
+        <div class="form-row">
+            <div class="col-8 offset-2">
+                <textarea asp-for="Recipe.Description" class="form-control" placeholder="A brief description of your dish"></textarea>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col-8 offset-2">
+                <div class="row">
+                    <div class="col-4 offset-4">
+                        <h6 class="text-center">Required Equipment</h6>
+                    </div>
+                </div>
+                @foreach (var recipeEquipment in Model.Recipe.RecipeEquipment)
+                {
+                    <div class="row variable-input-group mb-2">
+                        <div class="col-10">
+                            <input type="text" class="form-control" name="EquipmentName" required value="@recipeEquipment.Equipment.Name"/>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger btn-block remove-btn">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+
+                <div class="row m-1">
+                    <div class="col-2 offset-5">
+                        <button type="button" class="btn btn-primary btn-block add-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col-8 offset-2">
+                <div class="row">
+                    <div class="col-4 offset-4">
+                        <h6 class="text-center">Ingredients</h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-5">
+                        <p class="text-center">Name</p>
+                    </div>
+                    <div class="col-2">
+                        <p class="text-center">Amount</p>
+                    </div>
+                    <div class="col-3">
+                        <p class="text-center">Unit</p>
+                    </div>
+                </div>
+                @foreach (var ingredientAmount in Model.Recipe.IngredientAmounts)
+                {
+                    <div class="row variable-input-group mb-2">
+                        <div class="col-5">
+                            <input type="text" name="IngredientName" class="form-control" required value="@ingredientAmount.Ingredient.Name"/>
+                        </div>
+                        <div class="col-2">
+                            <input type="number" name="IngredientAmount" class="form-control" required value="@ingredientAmount.Amount"/>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="IngredientUnit" class="form-control" required value="@ingredientAmount.Unit"/>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger btn-block remove-btn">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+
+                <div class="row m-1">
+                    <div class="col-2 offset-5">
+                        <button type="button" class="btn btn-primary btn-block add-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-row">
+            <div class="col-8 offset-2">
+                <div class="row">
+                    <div class="col-4 offset-4">
+                        <h6 class="text-center">Instructions</h6>
+                    </div>
+                </div>
+                @foreach (var instruction in Model.Recipe.Instructions)
+                {
+                    <div class="row variable-input-group mb-2">
+                        <div class="col-1">
+                            <input type="number" required readonly class="form-control-plaintext" value="@instruction.Step" name="InstructionStep" id="instr-step" />
+                        </div>
+                        <div class="col-9">
+                            <textarea type="text" required placeholder="Provide detailed but concise directions" name="InstructionDescription" class="form-control">
+                                @instruction.Description
+                            </textarea>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger btn-block remove-btn">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
+
+                <div class="row m-1">
+                    <div class="col-2 offset-5">
+                        <button type="button" class="btn btn-primary btn-block add-btn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="Index">Back to List</a>
 </div>
 
 @section Scripts {
+    
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -42,7 +42,7 @@ namespace Cookit.WebApp.Pages.Recipes
             Recipe.Instructions = ParseInstructionInput(InstructionStep, InstructionDescription);
 
             _context.Recipes.Add(Recipe);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

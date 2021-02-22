@@ -10,6 +10,6 @@ namespace Cookit.WebApp.Models
         public int IngredientID { get; set; }
         public string Name { get; set; }
 
-        public ICollection<IngredientAmount> IngredientAmounts { get; set; }
+        public List<IngredientAmount> IngredientAmounts { get; set; }
     }
 }

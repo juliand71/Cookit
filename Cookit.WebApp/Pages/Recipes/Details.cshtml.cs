@@ -28,12 +28,18 @@ namespace Cookit.WebApp.Pages.Recipes
                 return NotFound();
             }
 
+            // can get equipment and ingredients in any order, so we grab them first
             Recipe = await _context.Recipes
                 .Include(r => r.RecipeEquipment).ThenInclude(re => re.Equipment)
                 .Include(r => r.IngredientAmounts).ThenInclude(ia => ia.Ingredient)
-                .Include(r => r.Instructions)
                 .AsNoTracking().FirstOrDefaultAsync(m => m.RecipeID == id);
 
+            IQueryable<Instruction> recipeInstructions = from i in _context.Instructions select i;
+            recipeInstructions = recipeInstructions.Where(i => i.RecipeID == id);
+            recipeInstructions.OrderByDescending(i => i.Step);
+
+            Recipe.Instructions = await recipeInstructions.AsNoTracking().ToListAsync();
+            
             if (Recipe == null)
             {
                 return NotFound();
