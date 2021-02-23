@@ -5,38 +5,27 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="row">
+    <div class="col-6 text-center">
+        <h1>Recipes</h1>
+    </div>
+    <div class="col-6 text-center">
+        <a class="btn btn-primary mt-1" asp-page="./Create">Create New Recipe</a>
+    </div>
+</div>
+<div class="row">
+    @foreach (var recipe in Model.Recipe)
+    {
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card">
+                <img class="card-img-top" src="~/images/@recipe.ImageFileName" />
+                <div class="card-body">
+                    <h5 class="card-title">@recipe.Title</h5>
+                    <p class="card-text">@recipe.Description</p>
+                    <a class="btn btn-primary mt-1" asp-page="./Details" asp-route-id="@recipe.RecipeID">View More</a>
+                </div>
+            </div>
+        </div>
+    }
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Recipe[0].Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Recipe[0].Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Recipe) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.RecipeID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.RecipeID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.RecipeID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+</div>

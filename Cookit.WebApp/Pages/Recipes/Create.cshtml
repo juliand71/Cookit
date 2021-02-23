@@ -9,7 +9,7 @@
 <h4>Recipe</h4>
 <hr />
 
-<form method="post">
+<form enctype="multipart/form-data" method="post">
     <div class="form-group">
         <div class="form-row mb-2">
             <div class="col-8 offset-2">
@@ -18,7 +18,7 @@
 
         </div>
         <div class="form-row">
-            <div class="col-8 offset-2">
+            <div class="col-8 offset-2 mb-2">
                 <textarea asp-for="Recipe.Description" class="form-control" placeholder="A brief description of your dish"></textarea>
             </div>
         </div>

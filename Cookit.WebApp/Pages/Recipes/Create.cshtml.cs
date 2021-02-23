@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Cookit.WebApp.Data;
 using Cookit.WebApp.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace Cookit.WebApp.Pages.Recipes
 {
     public class CreateModel : PageModel
     {
         private readonly Cookit.WebApp.Data.CookitContext _context;
-
-        public CreateModel(Cookit.WebApp.Data.CookitContext context)
+        private readonly IWebHostEnvironment _env;
+        public CreateModel(Cookit.WebApp.Data.CookitContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         public IActionResult OnGet()
@@ -26,15 +30,18 @@ namespace Cookit.WebApp.Pages.Recipes
 
         [BindProperty]
         public Recipe Recipe { get; set; }
-
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
+
         public async Task<IActionResult> OnPostAsync(string[] EquipmentName, 
             string[] IngredientName, 
             int[] IngredientAmount, 
             string[] IngredientUnit, 
             int[] InstructionStep, 
-            string[] InstructionDescription)
+            string[] InstructionDescription
+            )
         {
+
             // Title and Description are automatically bound using the asp-for tag helpers in the cshtml
             // Need to assign all of the navigation properties of the recipe
             Recipe.RecipeEquipment = ParseEquipmentInput(EquipmentName);

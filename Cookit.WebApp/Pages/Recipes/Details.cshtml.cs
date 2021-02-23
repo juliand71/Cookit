@@ -36,9 +36,8 @@ namespace Cookit.WebApp.Pages.Recipes
 
             IQueryable<Instruction> recipeInstructions = from i in _context.Instructions select i;
             recipeInstructions = recipeInstructions.Where(i => i.RecipeID == id);
-            recipeInstructions.OrderByDescending(i => i.Step);
 
-            Recipe.Instructions = await recipeInstructions.AsNoTracking().ToListAsync();
+            Recipe.Instructions = await recipeInstructions.OrderBy(i => i.Step).ToListAsync();
             
             if (Recipe == null)
             {

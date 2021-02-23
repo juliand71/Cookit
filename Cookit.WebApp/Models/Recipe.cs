@@ -11,6 +11,8 @@ namespace Cookit.WebApp.Models
         public int RecipeID { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string ImageFileName { get; set; }
+
         [DisplayName("Ingredients")]
         public List<IngredientAmount> IngredientAmounts { get; set; }
         public List<Instruction> Instructions { get; set; }
