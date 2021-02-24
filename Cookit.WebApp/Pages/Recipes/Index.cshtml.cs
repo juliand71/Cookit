@@ -22,7 +22,7 @@ namespace Cookit.WebApp.Pages.Recipes
 
         public IList<Recipe> Recipe { get;set; }
 
-        public async Task OnGetAsync(string sortOrder)
+        public async Task OnGetAsync()
         {
 
             Recipe = await _context.Recipes.ToListAsync();

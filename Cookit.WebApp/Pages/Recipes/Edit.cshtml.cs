@@ -8,16 +8,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Cookit.WebApp.Data;
 using Cookit.WebApp.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Cookit.WebApp.Services;
 
 namespace Cookit.WebApp.Pages.Recipes
 {
     public class EditModel : PageModel
     {
         private readonly Cookit.WebApp.Data.CookitContext _context;
+        private readonly ImageFileService _ifs;
 
-        public EditModel(Cookit.WebApp.Data.CookitContext context)
+        public EditModel(Cookit.WebApp.Data.CookitContext context, ImageFileService ifs)
         {
             _context = context;
+            _ifs = ifs;
         }
 
         [BindProperty]
@@ -52,6 +58,7 @@ namespace Cookit.WebApp.Pages.Recipes
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(int id,
+            IFormFile ImageFile,
             string[] EquipmentName,
             string[] IngredientName,
             int[] IngredientAmount,
@@ -59,6 +66,7 @@ namespace Cookit.WebApp.Pages.Recipes
             int[] InstructionStep,
             string[] InstructionDescription)
         {
+
             // can get equipment and ingredients in any order, so we grab them first
             var recipeToUpdate = await _context.Recipes
                 .Include(r => r.RecipeEquipment).ThenInclude(re => re.Equipment)
@@ -78,6 +86,18 @@ namespace Cookit.WebApp.Pages.Recipes
             _context.Recipes.Update(recipeToUpdate);
             recipeToUpdate.Title = Recipe.Title;
             recipeToUpdate.Description = Recipe.Description;
+
+            if (ImageFile != null)
+            {
+                if (_ifs.IsValidFileType(ImageFile.FileName))
+                {
+                    string imgFileName = _ifs.GetNewFileName(ImageFile.FileName);
+                    _ifs.SaveImageFile(ImageFile, imgFileName);
+                    //_ifs.OptimizeImageFile(imgFileName);
+                    Recipe.ImageFileName = imgFileName;
+                }
+            }
+
             UpdateEquipment(EquipmentName, recipeToUpdate);
             UpdateIngredients(IngredientName, IngredientAmount, IngredientUnit, recipeToUpdate);
             UpdateInstructions(InstructionStep, InstructionDescription, recipeToUpdate);

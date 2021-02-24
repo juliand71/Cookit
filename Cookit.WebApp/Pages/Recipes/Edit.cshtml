@@ -9,7 +9,7 @@
 
 <h4>Recipe</h4>
 <hr />
-<form method="post">
+<form enctype="multipart/form-data" method="post">
     <div class="form-group">
         <div class="form-row mb-2">
             <div class="col-8 offset-2">
@@ -20,6 +20,13 @@
         <div class="form-row">
             <div class="col-8 offset-2">
                 <textarea asp-for="Recipe.Description" class="form-control" placeholder="A brief description of your dish"></textarea>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-8 offset-2">
+                <img src="/recipe-images/@Model.Recipe.ImageFileName" alt="food" width="100" height="100" />
+                <input name="ImageFile" type="file" />
+                <input asp-for="Recipe.ImageCaption" class="form-control" placeholder="Caption your picture" />
             </div>
         </div>
     </div>
@@ -147,7 +154,8 @@
 </form>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a class="btn btn-secondary" asp-page="Index">Back to List</a>
+    <a class="btn btn-danger" asp-page="Delete" asp-route-id="@Model.Recipe.RecipeID">Delete this Recipe</a>
 </div>
 
 @section Scripts {

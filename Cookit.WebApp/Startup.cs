@@ -1,13 +1,16 @@
 using Cookit.WebApp.Data;
+using Cookit.WebApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,6 +33,8 @@ namespace Cookit.WebApp
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultDev")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddTransient<ImageFileService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,7 +52,14 @@ namespace Cookit.WebApp
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+
+            app.UseStaticFiles(); // wwwroot folder
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider("D:\\CookitRecipeImages\\"),
+                RequestPath = "/recipe-images"
+            });
 
             app.UseRouting();
 

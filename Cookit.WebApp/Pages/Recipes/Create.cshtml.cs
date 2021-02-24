@@ -10,17 +10,18 @@ using Cookit.WebApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Cookit.WebApp.Services;
 
 namespace Cookit.WebApp.Pages.Recipes
 {
     public class CreateModel : PageModel
     {
         private readonly Cookit.WebApp.Data.CookitContext _context;
-        private readonly IWebHostEnvironment _env;
-        public CreateModel(Cookit.WebApp.Data.CookitContext context, IWebHostEnvironment env)
+        private readonly ImageFileService _ifs;
+        public CreateModel(Cookit.WebApp.Data.CookitContext context, ImageFileService ifs)
         {
             _context = context;
-            _env = env;
+            _ifs = ifs;
         }
 
         public IActionResult OnGet()
@@ -33,7 +34,8 @@ namespace Cookit.WebApp.Pages.Recipes
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
 
 
-        public async Task<IActionResult> OnPostAsync(string[] EquipmentName, 
+        public async Task<IActionResult> OnPostAsync(IFormFile ImageFile, 
+            string[] EquipmentName, 
             string[] IngredientName, 
             int[] IngredientAmount, 
             string[] IngredientUnit, 
@@ -41,6 +43,17 @@ namespace Cookit.WebApp.Pages.Recipes
             string[] InstructionDescription
             )
         {
+            if (ImageFile != null)
+            {
+                if (_ifs.IsValidFileType(ImageFile.FileName))
+                {
+                    string imgFileName = _ifs.GetNewFileName(ImageFile.FileName);
+                    _ifs.SaveImageFile(ImageFile, imgFileName);
+                    //_ifs.OptimizeImageFile(imgFileName);
+                    Recipe.ImageFileName = imgFileName;
+                }
+            }
+
 
             // Title and Description are automatically bound using the asp-for tag helpers in the cshtml
             // Need to assign all of the navigation properties of the recipe

@@ -5,62 +5,98 @@
     ViewData["Title"] = "Details";
 }
 
-<img src="~/images/@Model.Recipe.ImageFileName" />
-<h4>@Model.Recipe.Title</h4>
-<p>@Model.Recipe.Description</p>
-
 <div class="row">
-    <div class="col-10 offset-1">
-        <div class="row">
-            <div class="col-4 offset-4">
-                <h6 class="text-center">Equipment</h6>
-            </div>
-        </div>
-        <div class="row">
-            @foreach (var requip in Model.Recipe.RecipeEquipment)
-            {
-                <div class="col">
-                    <p>@requip.Equipment.Name</p>
-                </div>
-            }
-        </div>
-        <div class="row">
-            <div class="col-4 offset-4">
-                <h6 class="text-center">Ingredients</h6>
-            </div>
-        </div>
-        <div class="row">
-            @foreach (var ingAmount in Model.Recipe.IngredientAmounts)
-            {
-                <div class="col-6 text-center">
-                    <p>@ingAmount.Ingredient.Name</p>
-                </div>
-                <div class="col-6">
-                    <p><span>@ingAmount.Amount</span> <span>@ingAmount.Unit</span></p>
-                </div>
-            }
-        </div>
-        <div class="row">
-            <div class="col-4 offset-4">
-                <h6 class="text-center">Instructions</h6>
-            </div>
-        </div>
-        @foreach (var instruction in Model.Recipe.Instructions)
-        {
-            <div class="row">
-                <div class="col-2">
-                    <p>@instruction.Step</p>
-                </div>
-                <div class="col-8">
-                    <p>@instruction.Description</p>
-                </div>
-            </div>
-        }
+    <div class="col">
+        <figure>
+            <img src="/recipe-images/@Model.Recipe.ImageFileName" alt="recipe-dish"
+                 class="figure-img img-fluid rounded" />
+            <figcaption class="figure-caption">@Model.Recipe.ImageCaption</figcaption>
+        </figure>
+    </div>
+    <div class="col">
+        <h2>@Model.Recipe.Title</h2>
+        <p class="lead mb-4">@Model.Recipe.Description</p>
 
+        <div>
+            <a class="btn btn-outline-primary" asp-page="./Edit" asp-route-id="@Model.Recipe.RecipeID">Edit</a>
+            <a class="btn btn-secondary" asp-page="./Index">Back to List</a>
+        </div>
     </div>
 </div>
+<div class="accordion" id="recipe-detail-accordion">
+    <div class="card">
+        <div class="card-header" id="equipment-heading">
+            <h2 class="mb-0">
+                <button class="btn btn-link w-100 text-left" type="button" data-toggle="collapse" data-target="#equipment-collapse" aria-expanded="true" aria-controls="equipment-collapse">
+                    Required Equipment
+                </button>
+            </h2>
+        </div>
 
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Recipe.RecipeID">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+        <div id="equipment-collapse" class="collapse show" aria-labelledby="equipment-heading" data-parent="#recipe-detail-accordion">
+            <div class="card-body">
+                <ul>
+                    @foreach (var requip in Model.Recipe.RecipeEquipment)
+                    {
+                        <li>@requip.Equipment.Name</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="ingredient-heading">
+            <h2 class="mb-0">
+                <button class="btn btn-link collapsed w-100 text-left" type="button" data-toggle="collapse" data-target="#ingredient-collapse" aria-expanded="false" aria-controls="ingredient-collapse">
+                    Ingredients
+                </button>
+            </h2>
+        </div>
+        <div id="ingredient-collapse" class="collapse" aria-labelledby="ingredient-heading" data-parent="#recipe-detail-accordion">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Ingredient</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ingAmount in Model.Recipe.IngredientAmounts)
+                        {
+                            <tr>
+                                <td>@ingAmount.Ingredient.Name</td>
+                                <td>@ingAmount.Amount</td>
+                                <td>@ingAmount.Unit</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="instruction-heading">
+            <h2 class="mb-0">
+                <button class="btn btn-link collapsed w-100 text-left" type="button" data-toggle="collapse" data-target="#instruction-collapse" aria-expanded="false" aria-controls="instruction-collapse">
+                    Instructions
+                </button>
+            </h2>
+        </div>
+        <div id="instruction-collapse" class="collapse" aria-labelledby="instruction-heading" data-parent="#recipe-detail-accordion">
+            <div class="card-body">
+                @foreach (var instruction in Model.Recipe.Instructions)
+                {
+                    <div class="media">
+                        <h4 class="mr-3">@instruction.Step</h4>
+                        <div class="media-body">
+                            <p class="mt-1">@instruction.Description</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
