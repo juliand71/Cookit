@@ -30,7 +30,7 @@ namespace Cookit.WebApp
         {
             services.AddRazorPages();
             services.AddDbContext<CookitContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultDev")));
+                options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
