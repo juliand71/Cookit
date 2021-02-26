@@ -10,7 +10,6 @@ namespace Cookit.WebApp.Data
     {
         public static void Initialize(CookitContext context)
         {
-            context.Database.EnsureCreated();
 
             // if Recipes already Exist
             if (context.Recipes.Any())
