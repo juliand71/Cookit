@@ -7,16 +7,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Cookit.WebApp.Data;
 using Cookit.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Cookit.WebApp.Services;
+using Cookit.WebApp.Models.PageModels;
 
 namespace Cookit.WebApp.Pages.Recipes
 {
-    public class DetailsModel : PageModel
+    [AllowAnonymous]
+    public class DetailsModel : RecipePageModel
     {
-        private readonly Cookit.WebApp.Data.CookitContext _context;
 
-        public DetailsModel(Cookit.WebApp.Data.CookitContext context)
+        public DetailsModel(
+            CookitContext context,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager,
+            ImageFileService ifs) : base(context, authorizationService, userManager, ifs)
         {
-            _context = context;
         }
 
         public Recipe Recipe { get; set; }

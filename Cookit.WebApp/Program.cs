@@ -27,7 +27,7 @@ namespace Cookit.WebApp
                 {
                     var context = services.GetRequiredService<CookitContext>();
                     // context.Database.EnsureCreated();
-                    DbInitializer.Initialize(context);
+                    // DbInitializer.Initialize(context);
                 }
                 catch (Exception ex)
                 {

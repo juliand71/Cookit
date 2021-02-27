@@ -12,18 +12,23 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Cookit.WebApp.Services;
+using Cookit.WebApp.Models.PageModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Cookit.WebApp.Authorization;
 
 namespace Cookit.WebApp.Pages.Recipes
 {
-    public class EditModel : PageModel
+    public class EditModel : RecipePageModel
     {
-        private readonly Cookit.WebApp.Data.CookitContext _context;
-        private readonly ImageFileService _ifs;
 
-        public EditModel(Cookit.WebApp.Data.CookitContext context, ImageFileService ifs)
+        public EditModel(
+            CookitContext context,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager,
+            ImageFileService ifs) : base(context, authorizationService, userManager, ifs)
         {
-            _context = context;
-            _ifs = ifs;
+
         }
 
         [BindProperty]
@@ -36,23 +41,39 @@ namespace Cookit.WebApp.Pages.Recipes
                 return NotFound();
             }
 
-            // can get equipment and ingredients in any order, so we grab them first
-            Recipe = await _context.Recipes
-                .Include(r => r.RecipeEquipment).ThenInclude(re => re.Equipment)
-                .Include(r => r.IngredientAmounts).ThenInclude(ia => ia.Ingredient)
-                .AsNoTracking().FirstOrDefaultAsync(m => m.RecipeID == id);
-
-            IQueryable<Instruction> recipeInstructions = from i in _context.Instructions select i;
-            recipeInstructions = recipeInstructions.Where(i => i.RecipeID == id);
-            recipeInstructions.OrderByDescending(i => i.Step);
-
-            Recipe.Instructions = await recipeInstructions.AsNoTracking().ToListAsync();
-
-            if (Recipe == null)
+            // get just the recipe object first, checking authorization
+            var recipeToEdit = await _context.Recipes.FindAsync(id);
+            if (recipeToEdit == null)
             {
                 return NotFound();
             }
-            return Page();
+            var authorizeResult = await _authorizationService.AuthorizeAsync(User, recipeToEdit, "CUDPolicy");
+
+            if (authorizeResult.Succeeded)
+            {
+                // can get equipment and ingredients in any order, so we grab them first
+                Recipe = await _context.Recipes
+                    .Include(r => r.RecipeEquipment).ThenInclude(re => re.Equipment)
+                    .Include(r => r.IngredientAmounts).ThenInclude(ia => ia.Ingredient)
+                    .AsNoTracking().FirstOrDefaultAsync(m => m.RecipeID == id);
+
+                IQueryable<Instruction> recipeInstructions = from i in _context.Instructions select i;
+                recipeInstructions = recipeInstructions.Where(i => i.RecipeID == id);
+                recipeInstructions.OrderByDescending(i => i.Step);
+
+                Recipe.Instructions = await recipeInstructions.AsNoTracking().ToListAsync();
+
+                return Page();
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
+                return new ForbidResult();
+            }
+            else
+            {
+                return new ChallengeResult();
+            }
+
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -66,6 +87,7 @@ namespace Cookit.WebApp.Pages.Recipes
             int[] InstructionStep,
             string[] InstructionDescription)
         {
+
 
             // can get equipment and ingredients in any order, so we grab them first
             var recipeToUpdate = await _context.Recipes
@@ -83,28 +105,42 @@ namespace Cookit.WebApp.Pages.Recipes
             {
                 return NotFound();
             }
-            _context.Recipes.Update(recipeToUpdate);
-            recipeToUpdate.Title = Recipe.Title;
-            recipeToUpdate.Description = Recipe.Description;
 
-            if (ImageFile != null)
+            var authorizeResult = await _authorizationService.AuthorizeAsync(User, recipeToUpdate, "CUDPolicy");
+            if (authorizeResult.Succeeded)
             {
-                if (_ifs.IsValidFileType(ImageFile.FileName))
+                _context.Recipes.Update(recipeToUpdate);
+                recipeToUpdate.Title = Recipe.Title;
+                recipeToUpdate.Description = Recipe.Description;
+
+                if (ImageFile != null)
                 {
-                    string imgFileName = _ifs.GetNewFileName(ImageFile.FileName);
-                    _ifs.SaveImageFile(ImageFile, imgFileName);
-                    //_ifs.OptimizeImageFile(imgFileName);
-                    Recipe.ImageFileName = imgFileName;
+                    if (_ifs.IsValidFileType(ImageFile.FileName))
+                    {
+                        string imgFileName = _ifs.GetNewFileName(ImageFile.FileName);
+                        _ifs.SaveImageFile(ImageFile, imgFileName);
+                        //_ifs.OptimizeImageFile(imgFileName);
+                        Recipe.ImageFileName = imgFileName;
+                    }
                 }
+
+                UpdateEquipment(EquipmentName, recipeToUpdate);
+                UpdateIngredients(IngredientName, IngredientAmount, IngredientUnit, recipeToUpdate);
+                UpdateInstructions(InstructionStep, InstructionDescription, recipeToUpdate);
+
+                await _context.SaveChangesAsync();
+
+                return RedirectToPage("./Index");
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
+                return new ForbidResult();
+            }
+            else
+            {
+                return new ChallengeResult();
             }
 
-            UpdateEquipment(EquipmentName, recipeToUpdate);
-            UpdateIngredients(IngredientName, IngredientAmount, IngredientUnit, recipeToUpdate);
-            UpdateInstructions(InstructionStep, InstructionDescription, recipeToUpdate);
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
         }
 
         /*

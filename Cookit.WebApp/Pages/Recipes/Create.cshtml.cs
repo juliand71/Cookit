@@ -11,22 +11,33 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Cookit.WebApp.Services;
+using Cookit.WebApp.Models.PageModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Cookit.WebApp.Pages.Recipes
 {
-    public class CreateModel : PageModel
+    public class CreateModel : RecipePageModel
     {
-        private readonly Cookit.WebApp.Data.CookitContext _context;
-        private readonly ImageFileService _ifs;
-        public CreateModel(Cookit.WebApp.Data.CookitContext context, ImageFileService ifs)
+        public CreateModel(
+            CookitContext context,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager,
+            ImageFileService ifs) : base(context, authorizationService, userManager, ifs)
         {
-            _context = context;
-            _ifs = ifs;
+
         }
 
         public IActionResult OnGet()
         {
-            return Page();
+            if (User.Identity.IsAuthenticated)
+            {
+                return Page();
+            }
+            else
+            {
+                return new ChallengeResult();
+            }
         }
 
         [BindProperty]
@@ -43,6 +54,15 @@ namespace Cookit.WebApp.Pages.Recipes
             string[] InstructionDescription
             )
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                Recipe.Owner = User.Identity.Name;
+            }
+            else
+            {
+                return new ChallengeResult();
+            }
+
             if (ImageFile != null)
             {
                 if (_ifs.IsValidFileType(ImageFile.FileName))

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Cookit.WebApp.Data;
 using Cookit.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cookit.WebApp.Pages.Recipes
 {
+    [AllowAnonymous]
     public class IndexModel : PageModel
     {
         private readonly Cookit.WebApp.Data.CookitContext _context;

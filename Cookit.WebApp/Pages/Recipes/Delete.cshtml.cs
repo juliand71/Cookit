@@ -7,16 +7,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Cookit.WebApp.Data;
 using Cookit.WebApp.Models;
+using Cookit.WebApp.Models.PageModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Cookit.WebApp.Services;
 
 namespace Cookit.WebApp.Pages.Recipes
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel : RecipePageModel
     {
-        private readonly Cookit.WebApp.Data.CookitContext _context;
 
-        public DeleteModel(Cookit.WebApp.Data.CookitContext context)
+        public DeleteModel(
+            CookitContext context,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager,
+            ImageFileService ifs) : base(context, authorizationService, userManager, ifs)
         {
-            _context = context;
+
         }
 
         [BindProperty]
@@ -39,12 +46,26 @@ namespace Cookit.WebApp.Pages.Recipes
                 return NotFound();
             }
 
-            if (saveChangesError.GetValueOrDefault())
+            var authorizeResult = await _authorizationService.AuthorizeAsync(User, Recipe, "CUDPolicy");
+
+            if (authorizeResult.Succeeded)
             {
-                ErrorMessage = "Delete failed. Try again";
+                if (saveChangesError.GetValueOrDefault())
+                {
+                    ErrorMessage = "Delete failed. Try again";
+                }
+
+                return Page();
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
+                return new ForbidResult();
+            }
+            else
+            {
+                return new ChallengeResult();
             }
 
-            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
@@ -61,18 +82,32 @@ namespace Cookit.WebApp.Pages.Recipes
                 return NotFound();
             }
 
-            try
+            var authorizeResult = await _authorizationService.AuthorizeAsync(User, recipe, "CUDPolicy");
+
+            if (authorizeResult.Succeeded)
             {
-                _context.Recipes.Remove(recipe);
-                await _context.SaveChangesAsync();
-                return RedirectToPage("./Index");
+                try
+                {
+                    _context.Recipes.Remove(recipe);
+                    await _context.SaveChangesAsync();
+                    return RedirectToPage("./Index");
+                }
+                catch (DbUpdateException /* ex */)
+                {
+                    //Log the error (uncomment ex variable name and write a log.)
+                    return RedirectToAction("./Delete",
+                                         new { id, saveChangesError = true });
+                }
             }
-            catch (DbUpdateException /* ex */)
+            else if (User.Identity.IsAuthenticated)
             {
-                //Log the error (uncomment ex variable name and write a log.)
-                return RedirectToAction("./Delete",
-                                     new { id, saveChangesError = true });
+                return new ForbidResult();
             }
+            else
+            {
+                return new ChallengeResult();
+            }
+
         }
     }
 }

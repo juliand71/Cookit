@@ -1,5 +1,7 @@
+using Cookit.WebApp.Authorization;
 using Cookit.WebApp.Data;
 using Cookit.WebApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,11 +35,24 @@ namespace Cookit.WebApp
             services.AddDbContext<CookitContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
-            services.AddDefaultIdentity<IdentityUser>()
+            // adding identity and role manager services
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<CookitContext>();
+
+            // require Authorization on all pages by default
+            // this means we will need to make sure any pages where we don't need authorization
+            // have allow anonymous attribute
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CUDPolicy", policy =>
+                    policy.Requirements.Add(new OwnerRequirement()));
+                options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+            });
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            // add our custom service for dealing with the image files
             services.AddTransient<ImageFileService>();
         }
 

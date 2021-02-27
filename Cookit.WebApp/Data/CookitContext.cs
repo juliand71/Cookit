@@ -33,7 +33,6 @@ namespace Cookit.WebApp.Data
             modelBuilder.Entity<IngredientAmount>().ToTable("IngredientAmount");
             modelBuilder.Entity<Equipment>().ToTable("Equipment");
             modelBuilder.Entity<RecipeEquipment>().ToTable("RecipeEquipment");
-            modelBuilder.Entity<CookitUser>().ToTable("CookitUser");
         }
     }
 }
