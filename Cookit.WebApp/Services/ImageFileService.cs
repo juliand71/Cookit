@@ -18,15 +18,9 @@ namespace Cookit.WebApp.Services
         public ImageFileService(IWebHostEnvironment env)
         {
             _env = env;
+            _defaultDir = "D:\\CookitRecipeImages\\";
 
-            if (_env.IsDevelopment())
-            {
-                _defaultDir = "D:\\CookitRecipeImages\\";
-            }
-            else
-            {
-                _defaultDir = "E:\\CookitRecipeImages\\";
-            }
+
         }
 
         // helper method to create a new random file name
