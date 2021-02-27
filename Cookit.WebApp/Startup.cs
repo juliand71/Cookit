@@ -32,6 +32,7 @@ namespace Cookit.WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+
             services.AddDbContext<CookitContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
