@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,10 +13,20 @@ namespace Cookit.WebApp.Services
     public class ImageFileService
     {
         private readonly IWebHostEnvironment _env;
-        private readonly string _defaultDir = "D:\\CookitRecipeImages\\";
+
+        private string _defaultDir;
         public ImageFileService(IWebHostEnvironment env)
         {
             _env = env;
+
+            if (_env.IsDevelopment())
+            {
+                _defaultDir = "D:\\CookitRecipeImages\\";
+            }
+            else
+            {
+                _defaultDir = "E:\\CookitRecipeImages\\";
+            }
         }
 
         // helper method to create a new random file name
