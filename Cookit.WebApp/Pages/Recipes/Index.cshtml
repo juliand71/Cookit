@@ -18,11 +18,11 @@
     {
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card">
-                <img class="card-img-top" src="/recipe-images/@recipe.ImageFileName" />
+                <img class="card-img-top recipe-card-img" src="/recipe-images/@recipe.ImageFileName" />
                 <div class="card-body">
                     <h5 class="card-title">@recipe.Title</h5>
                     <p class="text-muted">By @recipe.Owner</p>
-                    <p class="card-text recipe-card-description">@recipe.Description</p>
+                    <p class="card-text">@recipe.Description</p>
                     <a class="btn btn-primary mt-1" asp-page="./Details" asp-route-id="@recipe.RecipeID">View More</a>
                 </div>
             </div>

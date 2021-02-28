@@ -3,52 +3,49 @@
 @{
     ViewData["Title"] = "Create";
 }
-
-<h1>Create</h1>
-
-<h4>Recipe</h4>
+<h4>Share a Recipe with Us!</h4>
 <hr />
 
 <form enctype="multipart/form-data" method="post">
     <div class="form-group">
         <div class="form-row mb-2">
-            <div class="col-8 offset-2">
+            <div class="col-10 offset-1 p-0">
                 <input asp-for="Recipe.Title" class="form-control" placeholder="Your Recipe Title" required />
             </div>
 
         </div>
         <div class="form-row">
-            <div class="col-8 offset-2 mb-2">
+            <div class="col-10 offset-1 p-0">
                 <textarea asp-for="Recipe.Description" class="form-control" placeholder="A brief description of your dish"></textarea>
             </div>
         </div>
         <div class="form-row">
-            <div class="col-8 offset-2">
-                <input name="ImageFile" type="file" />
+            <div class="col-10 offset-1 p-0">
+                <input class="m-2"name="ImageFile" type="file" />
                 <input asp-for="Recipe.ImageCaption" class="form-control" placeholder="Caption your picture" />
             </div>
         </div>
     </div>
     <div class="form-group">
         <div class="form-row">
-            <div class="col-8 offset-2">
+            <div class="col-10 offset-1 p-0">
                 <div class="row">
                     <div class="col-4 offset-4">
-                        <h6 class="text-center">Required Equipment</h6>
+                        <h6 class="text-center">Equipment</h6>
                     </div>
                 </div>
                 <div class="row variable-input-group mb-2">
                     <div class="col-10">
                         <input type="text" class="form-control" name="EquipmentName" required />
                     </div>
-                    <div class="col-2">
+                    <div class="col-2 pl-0">
                         <button type="button" class="btn btn-danger btn-block remove-btn">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
                 </div>
                 <div class="row m-1">
-                    <div class="col-2 offset-5">
+                    <div class="col-2 offset-5 p-0">
                         <button type="button" class="btn btn-primary btn-block add-btn">
                             <i class="fas fa-plus"></i>
                         </button>
@@ -60,7 +57,7 @@
 
     <div class="form-group">
         <div class="form-row">
-            <div class="col-8 offset-2">
+            <div class="col-10 offset-1 p-0">
                 <div class="row">
                     <div class="col-4 offset-4">
                         <h6 class="text-center">Ingredients</h6>
@@ -70,7 +67,7 @@
                     <div class="col-5">
                         <p class="text-center">Name</p>
                     </div>
-                    <div class="col-2">
+                    <div class="col-2 p-0">
                         <p class="text-center">Amount</p>
                     </div>
                     <div class="col-3">
@@ -81,20 +78,20 @@
                     <div class="col-5">
                         <input type="text" name="IngredientName" class="form-control" required />
                     </div>
-                    <div class="col-2">
+                    <div class="col-2 p-0">
                         <input type="number" name="IngredientAmount" class="form-control" required />
                     </div>
                     <div class="col-3">
                         <input type="text" name="IngredientUnit" class="form-control" required />
                     </div>
-                    <div class="col-2">
+                    <div class="col-2 pl-0">
                         <button type="button" class="btn btn-danger btn-block remove-btn">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
                 </div>
                 <div class="row m-1">
-                    <div class="col-2 offset-5">
+                    <div class="col-2 offset-5 p-0">
                         <button type="button" class="btn btn-primary btn-block add-btn">
                             <i class="fas fa-plus"></i>
                         </button>
@@ -106,27 +103,27 @@
 
     <div class="form-group">
         <div class="form-row">
-            <div class="col-8 offset-2">
+            <div class="col-10 offset-1 p-0">
                 <div class="row">
                     <div class="col-4 offset-4">
                         <h6 class="text-center">Instructions</h6>
                     </div>
                 </div>
                 <div class="row variable-input-group mb-2">
-                    <div class="col-1">
+                    <div class="col-1 pr-0">
                         <input type="number" required readonly class="form-control-plaintext" value="1" name="InstructionStep"/>
                     </div>
                     <div class="col-9">                    
                         <textarea type="text" required placeholder="Provide detailed but concise directions" name="InstructionDescription" class="form-control"></textarea>
                     </div>
-                    <div class="col-2">
+                    <div class="col-2 pl-0">
                         <button type="button" class="btn btn-danger btn-block remove-btn">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
                 </div>
                 <div class="row m-1">
-                    <div class="col-2 offset-5">
+                    <div class="col-2 offset-5 p-0">
                         <button type="button" class="btn btn-primary btn-block add-btn">
                             <i class="fas fa-plus"></i>
                         </button>
@@ -139,7 +136,7 @@
 </form>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a class="btn btn-secondary" asp-page="Index">Back to List</a>
 </div>
 
 @section Scripts {

@@ -73,4 +73,20 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
+/***************/
 /* Styles for keeping recipe cards consistent size*/
+/***************/
+
+/* Keep image sizes consistent */
+.card-img-top.recipe-card-img {
+    height: 30vh;
+    object-fit: cover;
+}
+
+/* Only display a set amount of text, keeps long descriptions from screwing up the size of the cards*/
+.card-text {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
