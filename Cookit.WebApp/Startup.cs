@@ -50,6 +50,7 @@ namespace Cookit.WebApp
                     policy.Requirements.Add(new OwnerRequirement()));
                 options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
             });
+            services.AddSingleton<IAuthorizationHandler, RecipeAuthorizationHandler>();
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
