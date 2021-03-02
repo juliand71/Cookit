@@ -13,6 +13,11 @@ namespace Cookit.WebApp.Authorization
                                                        OwnerRequirement requirement,
                                                        Recipe resource)
         {
+            // kinda cheating here but need a way to delete recipes wrongly submitted or something
+            if (context.User.IsInRole(WC.AdminRole) || context.User.Identity.Name == "admin@letscookitapp.com") 
+            {
+                context.Succeed(requirement);
+            }
             if (context.User.Identity.Name == resource.Owner)
             {
                 context.Succeed(requirement);
