@@ -18,8 +18,14 @@ Recipes have the following properties:
 
 Plan to add some more things like ratings and comments in the future.
 
+Currently recipes are being displayed on the index page in whatever order they are pulled from the database. Need to add some sorting features as well as paging.
+
+I also need to flesh out the user account management a bit more, particularly I would like to add a list of Recipes that users can view from their account.
 
 # Log
+### 2/28/21
+Fixed up some styling to make things look a bit better on Mobile. I also fixed a bug with the authorization that was causing users to get access denied even when the recipe that was posted is theirs.
+
 ### 2/27/21 - Deployment Adventures
 Today I learned that I need to learn more about Dev Ops, deployment, and similar topics.
 
