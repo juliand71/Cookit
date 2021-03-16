@@ -19,7 +19,7 @@ namespace Cookit.WebApp.Data
 
             var recipes = new Recipe[]
             {
-                new Recipe{Title="Grilled Cheese", Description="The basic sandwich best prepared with Tomato Soup", ImageFileName="grilled-cheese.jpg", ImageCaption = "Damn that's a tasty lookin' grilled cheese" },
+                new Recipe{Title="Grilled Cheese", Description="The basic sandwich best prepared with Tomato Soup", ImageFileName="grilled-cheese.jpg" },
             };
 
 
