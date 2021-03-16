@@ -4,14 +4,16 @@ using Cookit.WebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Cookit.WebApp.Migrations
 {
     [DbContext(typeof(CookitContext))]
-    partial class CookitContextModelSnapshot : ModelSnapshot
+    [Migration("20210316150212_AddUserHandle")]
+    partial class AddUserHandle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,10 +115,7 @@ namespace Cookit.WebApp.Migrations
                     b.Property<string>("ImageFileName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OwnerEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OwnerHandle")
+                    b.Property<string>("Owner")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")

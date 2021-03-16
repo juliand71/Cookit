@@ -17,13 +17,13 @@ namespace Cookit.WebApp.Models.PageModels
     {
         protected CookitContext _context;
         protected IAuthorizationService _authorizationService;
-        protected UserManager<IdentityUser> _userManager;
+        protected UserManager<CookitUser> _userManager;
         protected ImageFileService _ifs;
 
         public RecipePageModel(
             CookitContext context,
             IAuthorizationService authorizationService,
-            UserManager<IdentityUser> userManager,
+            UserManager<CookitUser> userManager,
             ImageFileService ifs) : base()
         {
             _context = context;

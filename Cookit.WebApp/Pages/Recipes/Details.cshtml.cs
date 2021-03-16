@@ -21,7 +21,7 @@ namespace Cookit.WebApp.Pages.Recipes
         public DetailsModel(
             CookitContext context,
             IAuthorizationService authorizationService,
-            UserManager<IdentityUser> userManager,
+            UserManager<CookitUser> userManager,
             ImageFileService ifs) : base(context, authorizationService, userManager, ifs)
         {
         }

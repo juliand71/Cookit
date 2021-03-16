@@ -15,7 +15,7 @@
     </div>
     <div class="col">
         <h2>@Model.Recipe.Title</h2>
-        <p class="text-muted">By @Model.Recipe.Owner</p>
+        <p class="text-muted">By @Model.Recipe.OwnerHandle</p>
         <p class="lead mb-4">@Model.Recipe.Description</p>
         <div>
             <a class="btn btn-outline-primary" asp-page="./Edit" asp-route-id="@Model.Recipe.RecipeID">Edit</a>

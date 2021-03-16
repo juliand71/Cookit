@@ -18,7 +18,8 @@ namespace Cookit.WebApp.Authorization
             {
                 context.Succeed(requirement);
             }
-            if (context.User.Identity.Name == resource.Owner)
+
+            if (context.User.Identity.Name == resource.OwnerEmail)
             {
                 context.Succeed(requirement);
             }

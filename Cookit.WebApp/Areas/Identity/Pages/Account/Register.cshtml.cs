@@ -20,16 +20,16 @@ namespace Cookit.WebApp.Areas.Identity.Pages.Account
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<CookitUser> _signInManager;
+        private readonly UserManager<CookitUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
+            UserManager<CookitUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            SignInManager<IdentityUser> signInManager,
+            SignInManager<CookitUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -50,8 +50,7 @@ namespace Cookit.WebApp.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [Display(Name = "Full Name")]
-            public string FullName { get; set; }
+            public string Handle { get; set; }
 
             [Required]
             [EmailAddress]
@@ -89,7 +88,7 @@ namespace Cookit.WebApp.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new CookitUser { FullName = Input.FullName, UserName = Input.Email, Email = Input.Email };
+                var user = new CookitUser { Handle = Input.Handle, UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
