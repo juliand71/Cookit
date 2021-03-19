@@ -1,6 +1,5 @@
 using Cookit.WebApp.Authorization;
 using Cookit.WebApp.Data;
-using Cookit.WebApp.Models;
 using Cookit.WebApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -38,7 +37,7 @@ namespace Cookit.WebApp
                 options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
             // adding identity and role manager services
-            services.AddIdentity<CookitUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<CookitContext>();
 

@@ -20,7 +20,7 @@ namespace Cookit.WebApp.Pages.Recipes
         public DeleteModel(
             CookitContext context,
             IAuthorizationService authorizationService,
-            UserManager<CookitUser> userManager,
+            UserManager<IdentityUser> userManager,
             ImageFileService ifs) : base(context, authorizationService, userManager, ifs)
         {
 

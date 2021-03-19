@@ -22,7 +22,7 @@ namespace Cookit.WebApp.Pages.Recipes
         public CreateModel(
             CookitContext context,
             IAuthorizationService authorizationService,
-            UserManager<CookitUser> userManager,
+            UserManager<IdentityUser> userManager,
             ImageFileService ifs) : base(context, authorizationService, userManager, ifs)
         {
 
@@ -56,15 +56,7 @@ namespace Cookit.WebApp.Pages.Recipes
         {
             if (User.Identity.IsAuthenticated)
             {
-                var user = await _userManager.GetUserAsync(User);
-                if (user == null)
-                {
-                    return NotFound(
-                        $"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-                }
-
-                Recipe.OwnerHandle = user.Handle;
-                Recipe.OwnerEmail = User.Identity.Name;
+                Recipe.Owner = User.Identity.Name;
             }
             else
             {

@@ -110,13 +110,13 @@ namespace Cookit.WebApp.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageCaption")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageFileName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OwnerEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OwnerHandle")
+                    b.Property<string>("Owner")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -355,7 +355,7 @@ namespace Cookit.WebApp.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<string>("Handle")
+                    b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("CookitUser");

@@ -1,8 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using Cookit.WebApp.Models 
 
-@inject SignInManager<CookitUser> SignInManager
-@inject UserManager<CookitUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 
 
 @if (SignInManager.IsSignedIn(User))

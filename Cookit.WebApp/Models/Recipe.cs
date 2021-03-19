@@ -12,8 +12,7 @@ namespace Cookit.WebApp.Models
         public int RecipeID { get; set; }
 
         // Owner - name for the User that Submitted the Recipe
-        public string OwnerHandle { get; set; }
-        public string OwnerEmail { get; set; }
+        public string Owner { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImageFileName { get; set; }
