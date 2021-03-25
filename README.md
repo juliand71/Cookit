@@ -23,7 +23,7 @@ Currently recipes are being displayed on the index page in whatever order they a
 I also need to flesh out the user account management a bit more, particularly I would like to add a list of Recipes that users can view from their account.
 
 # Log
-## 3/24/21
+### 3/24/21
 I did a pretty serious refactor of some code. Adjusted naming of Some Data Models, got rid of some funkiness going on with visual studio that seemed to be the result of scaffolding my user identity stuff. 
 
 Also I now have a bit more of a robust system in place for creating an initial admin user, and a test user. I also added E-mail account confirmation via SendGrid
