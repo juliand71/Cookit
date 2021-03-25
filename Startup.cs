@@ -37,7 +37,8 @@ namespace Cookit
                 Configuration.GetConnectionString("Default")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddIdentity<CookitUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<CookitUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<CookitContext>();
 
             
