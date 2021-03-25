@@ -23,6 +23,11 @@ Currently recipes are being displayed on the index page in whatever order they a
 I also need to flesh out the user account management a bit more, particularly I would like to add a list of Recipes that users can view from their account.
 
 # Log
+## 3/24/21
+I did a pretty serious refactor of some code. Adjusted naming of Some Data Models, got rid of some funkiness going on with visual studio that seemed to be the result of scaffolding my user identity stuff. 
+
+Also I now have a bit more of a robust system in place for creating an initial admin user, and a test user. I also added E-mail account confirmation via SendGrid
+
 ### 3/18/21
 Been doing random bits of work on this here and there. Trying to add e-mail confirmation to the authentication system. Decided to revert some of the commits I made around adding that and create a separate branch for it. I think the Identity code that was originally scaffolded in Visual Studio is causing me some headache trying to add customer data to my CookitUser class. 
 ### 2/28/21
