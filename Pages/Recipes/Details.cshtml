@@ -1,0 +1,103 @@
+﻿@page
+@model Cookit.Pages.Recipes.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col">
+        <figure>
+            <img src="/recipe-images/@Model.Recipe.ImageFile" alt="recipe-dish"
+                 class="figure-img img-fluid rounded" />
+
+        </figure>
+    </div>
+    <div class="col">
+        <h2>@Model.Recipe.Title</h2>
+        <p class="text-muted">By @Model.Recipe.Author.UserName</p>
+        <p class="lead mb-4">@Model.Recipe.Description</p>
+        <div>
+            <a class="btn btn-outline-primary" asp-page="./Edit" asp-route-id="@Model.Recipe.Id">Edit</a>
+            <a class="btn btn-secondary" asp-page="./Index">Back to List</a>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="recipe-detail-accordion">
+    <div class="card">
+        <div class="card-header" id="equipment-heading">
+            <h2 class="mb-0">
+                <button class="btn btn-link w-100 text-left" type="button" data-toggle="collapse" data-target="#equipment-collapse" aria-expanded="true" aria-controls="equipment-collapse">
+                    Required Equipment
+                </button>
+            </h2>
+        </div>
+
+        <div id="equipment-collapse" class="collapse show" aria-labelledby="equipment-heading" data-parent="#recipe-detail-accordion">
+            <div class="card-body">
+                <ul>
+                    @foreach (var requip in Model.Recipe.EquipmentRequirements)
+                    {
+                        <li>@requip.Equipment.Name</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="ingredient-heading">
+            <h2 class="mb-0">
+                <button class="btn btn-link collapsed w-100 text-left" type="button" data-toggle="collapse" data-target="#ingredient-collapse" aria-expanded="false" aria-controls="ingredient-collapse">
+                    Ingredients
+                </button>
+            </h2>
+        </div>
+        <div id="ingredient-collapse" class="collapse" aria-labelledby="ingredient-heading" data-parent="#recipe-detail-accordion">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Ingredient</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ingAmount in Model.Recipe.RecipeIngredients)
+                        {
+                            <tr>
+                                <td>@ingAmount.Ingredient.Name</td>
+                                <td>@ingAmount.Amount</td>
+                                <td>@ingAmount.Unit</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="instruction-heading">
+            <h2 class="mb-0">
+                <button class="btn btn-link collapsed w-100 text-left" type="button" data-toggle="collapse" data-target="#instruction-collapse" aria-expanded="false" aria-controls="instruction-collapse">
+                    Instructions
+                </button>
+            </h2>
+        </div>
+        <div id="instruction-collapse" class="collapse" aria-labelledby="instruction-heading" data-parent="#recipe-detail-accordion">
+            <div class="card-body">
+                @foreach (var instruction in Model.Recipe.Instructions)
+                {
+                    <div class="media">
+                        <h4 class="mr-3">@instruction.Step</h4>
+                        <div class="media-body">
+                            <p class="mt-1">@instruction.Text</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

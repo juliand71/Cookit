@@ -1,0 +1,36 @@
+﻿@page
+@model Cookit.Pages.Recipes.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-6 text-center">
+        <h1>Recipes</h1>
+    </div>
+    <div class="col-6 text-center">
+        <a class="btn btn-primary mt-1" asp-page="./Create">Create New Recipe</a>
+    </div>
+</div>
+<div class="row">
+    @foreach (var recipe in Model.Recipe)
+    {
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card">
+                <img class="card-img-top recipe-card-img" src="/recipe-images/@recipe.ImageFile" />
+                <div class="card-body">
+                    <h5 class="card-title">@recipe.Title</h5>
+                    <p class="text-muted">By <span>@@</span>@recipe.Author.UserName</p>
+                    <div class="card-text overflow">
+                        <p>@recipe.Description</p>
+                    </div>
+
+                    <a class="btn btn-primary mt-1" asp-page="./Details" asp-route-id="@recipe.Id">View More</a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

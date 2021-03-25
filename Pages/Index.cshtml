@@ -1,0 +1,25 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <div class="row">
+        <div class="col">
+            <figure>
+                <img src="~/images/COOKIT_HAT_LOGO.png" alt="Logo" width="150" height="150" />
+            </figure>
+        </div>
+        <div class="col">
+            <p class="mt-5">I always hated sifting through somebodies life story to just get a damn recipe. So I made a website where you will never have to! Hit the button below to browse our recipes. Or if you fancy yourself a cook submit your favorite recipe!</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6 offset-3">
+            <a class="btn btn-primary btn-lg" asp-page="/Recipes/Index">View Recipes</a>
+            <a class="btn btn-outline-success btn-lg" asp-page="/Recipes/Create">Submit New Recipe</a>
+        </div>
+    </div>
+</div>
