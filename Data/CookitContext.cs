@@ -23,6 +23,7 @@ namespace Cookit.Data
         public DbSet<Equipment> Equipment { get; set; }
         public DbSet<EquipmentRequirement> EquipmentRequirements { get; set; }
         public DbSet<CookitUser> CookitUsers { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -37,6 +38,7 @@ namespace Cookit.Data
             builder.Entity<RecipeIngredient>().ToTable("RecipeIngredient");
             builder.Entity<Equipment>().ToTable("Equipment");
             builder.Entity<EquipmentRequirement>().ToTable("EquipmentRequirement");
+            builder.Entity<Rating>().ToTable("Rating");
         }
 
         

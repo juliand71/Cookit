@@ -1,12 +1,17 @@
-﻿@using Microsoft.AspNetCore.Components
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@using Cookit.Models 
 @using Cookit.Data
-@using Cookit.Models
 @inject CookitContext context
+@inject UserManager<CookitUser> userManager 
 
 <div>
-
-
     @for (int i = 0; i < 5; i++)
     {
         int score = i;
@@ -18,18 +23,35 @@
         {
             <span class="far fa-star" @onclick="(e => SubmitRating(score))"></span>
         }
-
     }
 </div>
 
 @code {
+    [Parameter]
+    public int RecipeId { get; set; }
+    [Parameter]
+    public string UserId { get; set; }
 
     int currentScore;
+    CookitUser currentUser;
+    Recipe currentRecipe;
+    Rating rating;
+
 
     void SubmitRating(int score)
     {
         UpdateCurrentScore(score);
+        // check to see if there's already a rating matching this user and recipe
+        rating = context.Ratings.FirstOrDefault(r => r.RecipeId == RecipeId && r.UserId == UserId);
 
+        if (rating == null)
+        {
+            rating = new Rating { RecipeId = RecipeId, UserId = UserId };
+        }
+        context.Ratings.Add(rating);
+        rating.Score = currentScore + 1;
+
+        context.SaveChangesAsync();
     }
 
     void UpdateCurrentScore(int score)

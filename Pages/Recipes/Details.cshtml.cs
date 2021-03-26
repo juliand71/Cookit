@@ -27,9 +27,10 @@ namespace Cookit.Pages.Recipes
         }
 
         public Recipe Recipe { get; set; }
-        public Rating NewRating { get; set; }
+        public string currentUserId { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            currentUserId = _userManager.GetUserId(User);
             if (id == null)
             {
                 return NotFound();
@@ -47,18 +48,6 @@ namespace Cookit.Pages.Recipes
 
             Recipe.Instructions = await recipeInstructions.OrderBy(i => i.Step).ToListAsync();
 
-            foreach (var rating in Recipe.Ratings)
-            {
-                if (rating.UserId == _userManager.GetUserId(User))
-                {
-                    // user has already rated this recipe
-                    NewRating = rating;
-                }
-            }
-            if (NewRating == null)
-            {
-                NewRating = new Rating { Recipe = Recipe, User = await _userManager.GetUserAsync(User), Score = 1 };
-            }
             if (Recipe == null)
             {
                 return NotFound();

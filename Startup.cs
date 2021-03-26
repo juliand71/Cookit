@@ -60,7 +60,8 @@ namespace Cookit
             {
                 options.AddPolicy("CUDPolicy", policy =>
                     policy.Requirements.Add(new OwnerRequirement()));
-                options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                // found out that the below line causes issues with Blazor
+                //options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
             });
             services.AddSingleton<IAuthorizationHandler, RecipeAuthorizationHandler>();
 
