@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cookit.Migrations
 {
     [DbContext(typeof(CookitContext))]
-    [Migration("20210323012559_authorizationRefactor")]
-    partial class authorizationRefactor
+    [Migration("20210326030308_InitialRefactorMigrate")]
+    partial class InitialRefactorMigrate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,9 +39,6 @@ namespace Cookit.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<int>("Hash")
-                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -164,6 +161,31 @@ namespace Cookit.Migrations
                     b.ToTable("Instruction");
                 });
 
+            modelBuilder.Entity("Cookit.Models.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Rating");
+                });
+
             modelBuilder.Entity("Cookit.Models.Recipe", b =>
                 {
                     b.Property<int>("Id")
@@ -173,6 +195,12 @@ namespace Cookit.Migrations
 
                     b.Property<string>("AuthorId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("AverageScore")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("DatePosted")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -190,6 +218,31 @@ namespace Cookit.Migrations
                     b.ToTable("Recipe");
                 });
 
+            modelBuilder.Entity("Cookit.Models.RecipeComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RecipeComment");
+                });
+
             modelBuilder.Entity("Cookit.Models.RecipeIngredient", b =>
                 {
                     b.Property<int>("Id")
@@ -197,8 +250,8 @@ namespace Cookit.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<float>("Amount")
-                        .HasColumnType("real");
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
 
                     b.Property<int>("IngredientId")
                         .HasColumnType("int");
@@ -383,13 +436,47 @@ namespace Cookit.Migrations
                     b.Navigation("Recipe");
                 });
 
+            modelBuilder.Entity("Cookit.Models.Rating", b =>
+                {
+                    b.HasOne("Cookit.Models.Recipe", "Recipe")
+                        .WithMany("Ratings")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cookit.Data.CookitUser", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Cookit.Models.Recipe", b =>
                 {
                     b.HasOne("Cookit.Data.CookitUser", "Author")
-                        .WithMany()
+                        .WithMany("Recipes")
                         .HasForeignKey("AuthorId");
 
                     b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("Cookit.Models.RecipeComment", b =>
+                {
+                    b.HasOne("Cookit.Models.Recipe", "Recipe")
+                        .WithMany("Comments")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Cookit.Data.CookitUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Cookit.Models.RecipeIngredient", b =>
@@ -462,11 +549,22 @@ namespace Cookit.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Cookit.Data.CookitUser", b =>
+                {
+                    b.Navigation("Ratings");
+
+                    b.Navigation("Recipes");
+                });
+
             modelBuilder.Entity("Cookit.Models.Recipe", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("EquipmentRequirements");
 
                     b.Navigation("Instructions");
+
+                    b.Navigation("Ratings");
 
                     b.Navigation("RecipeIngredients");
                 });

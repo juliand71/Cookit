@@ -8,25 +8,44 @@ using Microsoft.EntityFrameworkCore;
 using Cookit.Data;
 using Cookit.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 
 namespace Cookit.Pages.Recipes
 {
     [AllowAnonymous]
     public class IndexModel : PageModel
     {
-        private readonly Cookit.Data.CookitContext _context;
-
-        public IndexModel(Cookit.Data.CookitContext context)
+        private readonly CookitContext _context;
+        private readonly MvcOptions _mvcOptions;
+        public IndexModel(CookitContext context, IOptions<MvcOptions> mvcOptions)
         {
             _context = context;
+            _mvcOptions = mvcOptions.Value;
         }
 
-        public IList<Recipe> Recipe { get;set; }
+        public IList<Recipe> Recipes { get;set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string sortOrder, string searchField)
         {
-            // need to add paging here at some point
-            Recipe = await _context.Recipes.Include(r => r.Author).ToListAsync();
+            IQueryable<Recipe> recipeIQ = from r in _context.Recipes.Take(25) select r;
+
+            switch (sortOrder)
+            {
+                case "new":
+                    recipeIQ = recipeIQ.OrderBy(r => r.DatePosted);
+                    break;
+                case "top":
+                    recipeIQ = recipeIQ.OrderByDescending(r => r.AverageScore);
+                    break;
+                default:
+                    recipeIQ = recipeIQ.OrderBy(r => r.DatePosted);
+                    break;
+            }
+
+            Recipes = await recipeIQ
+                .Include(r => r.Author)
+                .Include(r => r.Ratings)
+                .AsNoTracking().ToListAsync();
         }
     }
 }

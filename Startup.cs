@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +32,16 @@ namespace Cookit
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //int MyMaxModelBindingCollectionSize = 100;
+            //Int32.TryParse(Configuration["MyMaxModelBindingCollectionSize"],
+            //                           out MyMaxModelBindingCollectionSize);
+
+            //services.Configure<MvcOptions>(options =>
+            //       options.MaxModelBindingCollectionSize = MyMaxModelBindingCollectionSize);
+
             services.AddRazorPages();
+            // for rating component
+            services.AddServerSideBlazor();
 
             services.AddDbContext<CookitContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("Default")));
@@ -95,6 +105,7 @@ namespace Cookit
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapBlazorHub();
             });
         }
     }

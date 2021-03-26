@@ -14,6 +14,7 @@ namespace Cookit.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImageFile { get; set; }
+        public DateTime DatePosted { get; set; }
 
         /* Navigation Properties */
         public List<EquipmentRequirement> EquipmentRequirements { get; set; }
@@ -23,5 +24,12 @@ namespace Cookit.Models
         // Properties for User that Authored Recipe
         public string AuthorId { get; set; }
         public CookitUser Author { get; set; }
+
+        // properties for ratings
+        public List<Rating> Ratings { get; set; }
+        public double AverageScore { get; set; }
+
+        // properties for comments
+        public List<RecipeComment> Comments { get; set; }
     }
 }

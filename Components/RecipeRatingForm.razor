@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@using Cookit.Data
+@using Cookit.Models
+@inject CookitContext context
+
+<div>
+
+
+    @for (int i = 0; i < 5; i++)
+    {
+        int score = i;
+        if (currentScore >= score)
+        {
+            <span class="fas fa-star checked" @onclick="(e => SubmitRating(score))"></span>
+        }
+        else
+        {
+            <span class="far fa-star" @onclick="(e => SubmitRating(score))"></span>
+        }
+
+    }
+</div>
+
+@code {
+
+    int currentScore;
+
+    void SubmitRating(int score)
+    {
+        UpdateCurrentScore(score);
+
+    }
+
+    void UpdateCurrentScore(int score)
+    {
+        currentScore = score;
+    }
+}

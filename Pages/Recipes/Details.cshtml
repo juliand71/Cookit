@@ -1,27 +1,29 @@
 ﻿@page
+@using Cookit.Components
 @model Cookit.Pages.Recipes.DetailsModel
 
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
-
+<div>
+    <a class="btn btn-outline-primary" asp-page="./Edit" asp-route-id="@Model.Recipe.Id">Edit</a>
+    <a class="btn btn-secondary" asp-page="./Index">Back to List</a>
+</div>
 <div class="row">
-    <div class="col">
+    <div class="col-sm-12 col-md-4 col-lg-4">
         <figure>
             <img src="/recipe-images/@Model.Recipe.ImageFile" alt="recipe-dish"
-                 class="figure-img img-fluid rounded" />
-
+                 class="figure-img img-fluid rounded recipe-figure-img" />
         </figure>
+        <p><span id="ratingCOunt">@Model.Recipe.Ratings.Count()</span> rating <span id="ratingAvg">@Model.Recipe.AverageScore</span> average</p>
+        @(await Html.RenderComponentAsync<RecipeRatingForm>(RenderMode.ServerPrerendered))
     </div>
-    <div class="col">
+    <div class="col-sm-12 col-md-8 col-lg-8">
         <h2>@Model.Recipe.Title</h2>
         <p class="text-muted">By @Model.Recipe.Author.UserName</p>
         <p class="lead mb-4">@Model.Recipe.Description</p>
-        <div>
-            <a class="btn btn-outline-primary" asp-page="./Edit" asp-route-id="@Model.Recipe.Id">Edit</a>
-            <a class="btn btn-secondary" asp-page="./Index">Back to List</a>
-        </div>
+
     </div>
 </div>
 <div class="accordion" id="recipe-detail-accordion">

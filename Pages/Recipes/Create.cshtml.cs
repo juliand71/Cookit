@@ -61,7 +61,7 @@ namespace Cookit.Pages.Recipes
             {
                 return new ChallengeResult();
             }
-
+            Recipe.DatePosted = DateTime.Now.Date;
             if (ImageFile != null)
             {
                 if (_ifs.IsValidFileType(ImageFile.FileName))

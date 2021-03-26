@@ -5,21 +5,23 @@
 @inject UserManager<CookitUser> UserManager
 
 <ul class="navbar-nav">
+
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
-            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-        </li>
-        @if (User.IsInRole("Admin"))
-        {
-            <li class="nav-item">
-                <a id="registerAdmin" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register" title="Register">Register New Admin</a>
-            </li>
-        }
-        <li class="nav-item">
-            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-            </form>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="accountDropdownLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Hello @UserManager.GetUserName(User)!
+            </a>
+            <div class="dropdown-menu" aria-labelledby="accountDropdownLink">
+                <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage Account</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a id="registerAdmin" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register" title="Register">Register New Admin</a>
+                }
+                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                    <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                </form>
+            </div>
         </li>
     }
     else

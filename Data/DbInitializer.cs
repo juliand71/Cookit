@@ -14,6 +14,7 @@ namespace Cookit.Data
         {
             // run any pending migrations
             context.Database.Migrate();
+            Console.Write(context.Database.GetMigrations());
             CookitUser sampleAuthour;
             // check if any users exist
             if (!userManager.Users.Any())
@@ -75,7 +76,9 @@ namespace Cookit.Data
             {
                 Title = "Hungarian Goulash",
                 Description = "Only for when you are really really Hungary. This is a delicious and cheap recipe. It's mostly just a fancy beef stew. But you can make yourself sound really fancy when you tell your friends and family that you are making Hungarian Goulash!",
-                ImageFile = "hgoulash.jpg"
+                ImageFile = "hgoulash.jpg",
+                DatePosted = DateTime.Now.Date,
+                AverageScore = 5
             };
 
             goulashRecipe.Author = author;
@@ -136,6 +139,10 @@ namespace Cookit.Data
 
             var recInstructions = new List<Instruction>(instructions);
             goulashRecipe.Instructions = recInstructions;
+
+            var ratings = new List<Rating>();
+            ratings.Add(new Rating { Recipe = goulashRecipe, User = author, Score = 5 });
+            goulashRecipe.Ratings = ratings;
 
             context.Recipes.Add(goulashRecipe);
             context.SaveChanges();

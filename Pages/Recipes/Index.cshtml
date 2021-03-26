@@ -6,23 +6,45 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<div class="row">
-    <div class="col-6 text-center">
-        <h1>Recipes</h1>
+<nav class="navbar navbar-light border-bottom box-shadow mb-3">
+    <div class="container">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="accountDropdownLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sort By...
+                </a>
+                <div class="dropdown-menu" aria-labelledby="accountDropdownLink">
+                    <a class="nav-link text-dark" asp-area="" asp-page="./Index" asp-route-sortOrder="new">Newest</a>
+                    <a class="nav-link text-dark" asp-area="" asp-page="./Index" asp-route-sortOrder="top">Newest</a>
+                </div>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
     </div>
-    <div class="col-6 text-center">
-        <a class="btn btn-primary mt-1" asp-page="./Create">Create New Recipe</a>
-    </div>
-</div>
+</nav>
 <div class="row">
-    @foreach (var recipe in Model.Recipe)
+    @foreach (var recipe in Model.Recipes)
     {
         <div class="col-12 col-md-6 col-lg-4">
             <div class="card">
                 <img class="card-img-top recipe-card-img" src="/recipe-images/@recipe.ImageFile" />
                 <div class="card-body">
                     <h5 class="card-title">@recipe.Title</h5>
-                    <p class="text-muted">By <span>@@</span>@recipe.Author.UserName</p>
+                    <p class="text-muted">By <span>@@</span>@recipe.Author.UserName on <span>@recipe.DatePosted.ToShortDateString()</span></p>
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        if (recipe.AverageScore >= i)
+                        {
+                            <i class="fas fa-star checked"></i>
+                        }
+                        else
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    }
                     <div class="card-text overflow">
                         <p>@recipe.Description</p>
                     </div>
@@ -32,5 +54,4 @@
             </div>
         </div>
     }
-
 </div>

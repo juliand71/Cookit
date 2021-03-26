@@ -13,7 +13,7 @@ namespace Cookit.Data
         // no use for this as of yet
         //public int Hash { get; set; }
 
-        //public List<Recipe> Recipes { get; set; }
-        //public List<Rating> Ratings { get; set; }
+        public List<Recipe> Recipes { get; set; }
+        public List<Rating> Ratings { get; set; }
     }
 }
