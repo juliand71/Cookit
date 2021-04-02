@@ -78,7 +78,6 @@ namespace Cookit.Data
                 Description = "Only for when you are really really Hungary. This is a delicious and cheap recipe. It's mostly just a fancy beef stew. But you can make yourself sound really fancy when you tell your friends and family that you are making Hungarian Goulash!",
                 ImageFile = "hgoulash.jpg",
                 DatePosted = DateTime.Now.Date,
-                AverageScore = 5
             };
 
             goulashRecipe.Author = author;

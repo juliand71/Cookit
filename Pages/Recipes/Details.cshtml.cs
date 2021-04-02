@@ -31,6 +31,7 @@ namespace Cookit.Pages.Recipes
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             currentUserId = _userManager.GetUserId(User);
+
             if (id == null)
             {
                 return NotFound();
@@ -47,7 +48,7 @@ namespace Cookit.Pages.Recipes
             recipeInstructions = recipeInstructions.Where(i => i.RecipeId == id);
 
             Recipe.Instructions = await recipeInstructions.OrderBy(i => i.Step).ToListAsync();
-
+            
             if (Recipe == null)
             {
                 return NotFound();

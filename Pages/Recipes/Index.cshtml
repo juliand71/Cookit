@@ -36,7 +36,7 @@
                     <p class="text-muted">By <span>@@</span>@recipe.Author.UserName on <span>@recipe.DatePosted.ToShortDateString()</span></p>
                     @for (int i = 0; i < 5; i++)
                     {
-                        if (recipe.AverageScore >= i)
+                        if (recipe.AverageScore >= i+1)
                         {
                             <i class="fas fa-star checked"></i>
                         }

@@ -16,29 +16,8 @@
             <img src="/recipe-images/@Model.Recipe.ImageFile" alt="recipe-dish"
                  class="figure-img img-fluid rounded recipe-figure-img" />
         </figure>
-        <p><span id="ratingCOunt">@Model.Recipe.Ratings.Count()</span> ratings <span id="ratingAvg">@Model.Recipe.AverageScore</span> average</p>
-        <div>
-            @for (int i = 0; i < 5; i++)
-            {
-                if (Model.Recipe.AverageScore >= i + 1)
-                {
-                    <span class="fas fa-star checked"></span>
-                }
-                else
-                {
-                    <span class="far fa-star"></span>
-                }
-            }
-        </div>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <p>Your Rating:</p>
-            @(await Html.RenderComponentAsync<RecipeRatingForm>(RenderMode.ServerPrerendered, new { RecipeId = Model.Recipe.Id, UserId = Model.currentUserId }))
-        }
-        else
-        {
-            <p>Login or Signup to leave a rating!</p>
-        }
+        @* Blazor Component *@
+        @(await Html.RenderComponentAsync<RecipeRatingForm>(RenderMode.ServerPrerendered, new { RecipeId = Model.Recipe.Id, UserId = Model.currentUserId, UserLoggedIn = User.Identity.IsAuthenticated }))
 
     </div>
     <div class="col-sm-12 col-md-8 col-lg-8">

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,7 +28,29 @@ namespace Cookit.Models
 
         // properties for ratings
         public List<Rating> Ratings { get; set; }
-        public double AverageScore { get; set; }
+
+        [NotMapped]
+        public double AverageScore
+        {
+            get
+            {
+                double sumOfRatings = 0;
+                double average = 0;
+                if (Ratings == null)
+                {
+                    return average;
+                }
+                else
+                {
+                    foreach(var rating in Ratings)
+                    {
+                        sumOfRatings += rating.Score;
+                    }
+                    average = sumOfRatings / Ratings.Count;
+                    return average;
+                }
+            }
+        }
 
         // properties for comments
         public List<RecipeComment> Comments { get; set; }

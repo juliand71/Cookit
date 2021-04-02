@@ -6,52 +6,117 @@
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.JSInterop
-@using Cookit.Models 
+@using Microsoft.EntityFrameworkCore;
+@using Cookit.Models
 @using Cookit.Data
 @inject CookitContext context
-@inject UserManager<CookitUser> userManager 
+@inject UserManager<CookitUser> userManager
 
 <div>
-    @for (int i = 0; i < 5; i++)
+    @*
+        Since the initialize function runs Async, some loading might not finish exactly in time. Adding a loading text in case the current Recipe can't be loaded    
+    *@
+    @if (currentRecipe == null)
     {
-        int score = i;
-        if (currentScore >= score)
+        <span>Loading ratings...</span>
+    }
+    else
+    {
+        <p><span id="ratingCOunt">@currentRecipe.Ratings.Count</span> ratings <span id="ratingAvg">@currentRecipe.AverageScore</span> average</p>
+        @* Create 5 Star Icons
+            Need to use fas (solid) and far (regular) font awesome classes to achieve a filled in star
+        *@
+        <div>
+            @for (int i = 0; i < 5; i++)
+            {
+                if (currentRecipe.AverageScore >= i + 1)
+                {
+                    <span class="fas fa-star checked"></span>
+                }
+                else
+                {
+                    <span class="far fa-star"></span>
+                }
+            }
+        </div>
+        
+        @if (UserLoggedIn)
         {
-            <span class="fas fa-star checked" @onclick="(e => SubmitRating(score))"></span>
+            <p>Your rating: <span>@currentScore</span></p>
+            @for (int i = 0; i < 5; i++)
+            {
+                int score = i;
+                if (currentScore >= score)
+                {
+                    <span class="fas fa-star checked" @onclick="(e => UpdateCurrentScore(score))"></span>
+                }
+                else
+                {
+                    <span class="far fa-star" @onclick="(e => UpdateCurrentScore(score))"></span>
+                }
+            }
+            <button @onclick="(e => SubmitRating())">Submit</button>
         }
         else
         {
-            <span class="far fa-star" @onclick="(e => SubmitRating(score))"></span>
+            <p>Login or Signup to leave a rating!</p>
         }
+
     }
+
 </div>
 
 @code {
     [Parameter]
     public int RecipeId { get; set; }
     [Parameter]
-    public string UserId { get; set; }
+    public bool UserLoggedIn { get; set; }
+    [Parameter]
+    public string? UserId { get; set; }
 
     int currentScore;
     CookitUser currentUser;
-    Recipe currentRecipe;
     Rating rating;
+    Recipe currentRecipe;
 
-
-    void SubmitRating(int score)
+    // function to run while component is initialized
+    protected override async Task OnInitializedAsync()
     {
-        UpdateCurrentScore(score);
-        // check to see if there's already a rating matching this user and recipe
-        rating = context.Ratings.FirstOrDefault(r => r.RecipeId == RecipeId && r.UserId == UserId);
-
-        if (rating == null)
+        // get the current recipe and add it to our context to track
+        currentRecipe = await context.Recipes.Include(r => r.Ratings).AsNoTracking().FirstOrDefaultAsync(r => r.Id == RecipeId);
+        context.Recipes.Update(currentRecipe);
+        // if the user is logged in we want to get the User object too.
+        if (UserLoggedIn)
         {
-            rating = new Rating { RecipeId = RecipeId, UserId = UserId };
+            currentUser = await userManager.FindByIdAsync(UserId);
+            // find out if user has already rated the recipe
+            foreach (var rate in currentRecipe.Ratings)
+            {
+                if (rate.UserId == UserId)
+                {
+                    // if the user has already rated the recipe, then we want to update that existing rating instead of create a new one
+                    rating = rate;
+                    context.Ratings.Update(rating);
+                    currentScore = rating.Score;
+                }
+            }
+            if (rating == null)
+            {
+                // this means the user has not rated the recipe before, we create a new rating object with a default score of 5 stars
+                // cause we like positivity around here
+                rating = new Rating { UserId = UserId, RecipeId = RecipeId, Score = 5};
+                currentScore = rating.Score;
+                context.Ratings.Add(rating);
+            }
+            
         }
-        context.Ratings.Add(rating);
-        rating.Score = currentScore + 1;
+    }
 
-        context.SaveChangesAsync();
+    void SubmitRating()
+    {
+        // all we need to do here is update the score and save changed. All the set up work was done in the initialize function
+        rating.Score = currentScore;
+        context.SaveChanges();
     }
 
     void UpdateCurrentScore(int score)
