@@ -23,6 +23,11 @@ Currently recipes are being displayed on the index page in whatever order they a
 I also need to flesh out the user account management a bit more, particularly I would like to add a list of Recipes that users can view from their account.
 
 # Log
+### 3/26/21
+I finally got ratings working for the most part. It's a bit rough around the edges still but it works.
+
+I decided to mess around with Blazor and create a server side component to handle submitting ratings without reloading the entire page. It works pretty nicely once I got the kinks of combining it with Razor Pages ironed out.
+
 ### 3/24/21
 I did a pretty serious refactor of some code. Adjusted naming of Some Data Models, got rid of some funkiness going on with visual studio that seemed to be the result of scaffolding my user identity stuff. 
 
